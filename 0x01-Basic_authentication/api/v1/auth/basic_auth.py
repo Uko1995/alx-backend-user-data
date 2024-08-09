@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 ''' basic_auth class module'''
 from api.v1.auth.auth import Auth
+from models.user import User
 import base64
 from typing import TypeVar
 
@@ -50,9 +51,9 @@ class BasicAuth(Auth):
     def user_object_from_credentials(
             self, user_email: str, user_pwd: str) -> TypeVar('User'):
         '''returns User instance on email and password'''
-        if not user_email or isinstance(user_email, str):
+        if not isinstance(user_email, str) or not user_email:
             return None
-        if not user_pwd or isinstance(user_pwd, str):
+        if not isinstance(user_pwd, str) or not user_pwd:
             return None
 
         try:
@@ -61,9 +62,9 @@ class BasicAuth(Auth):
             return None
 
         for user in users:
-            if not user.is_valid_password(user_pwd):
-                return None
-            return user
+            if user.is_valid_password(user_pwd):
+                return user
+        return None
 
     def current_user(self, request=None) -> TypeVar('User'):
         '''overloads Auth and retrieves User instance'''
