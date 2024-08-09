@@ -2,6 +2,7 @@
 ''' basic_auth class module'''
 from api.v1.auth.auth import Auth
 import base64
+from typing import TypeVar
 
 
 class BasicAuth(Auth):
@@ -45,3 +46,20 @@ class BasicAuth(Auth):
         else:
             seperated = string.split(':')
             return tuple(seperated)
+
+    def user_object_from_credentials(
+            self, user_email: str, user_pwd: str) -> TypeVar('User'):
+        '''returns User instance on email and password'''
+        if not user_email or isinstance(user_email, str):
+            return None
+        if not user_pwd or isinstance(user_pwd, str):
+            return None
+
+        try:
+            users = User.search({'email': user_email})
+            for user in users:
+                if user.is_valid_password(user_pwd):
+                    return user
+        except Exception as e:
+            return None
+        return None
