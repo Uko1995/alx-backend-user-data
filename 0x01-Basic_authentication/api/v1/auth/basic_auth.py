@@ -37,11 +37,11 @@ class BasicAuth(Auth):
         '''extracts email and password'''
         string = decoded_base64_authorization_header
         if not string:
-            return None
+            return None, None
         if not isinstance(string, str):
-            return None
+            return None, None
         if ':' not in string:
-            return None
+            return None, None
         else:
             seperated = string.split(':')
             return tuple(seperated)
