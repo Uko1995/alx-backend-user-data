@@ -45,7 +45,7 @@ class BasicAuth(Auth):
         if ':' not in string:
             return None, None
         else:
-            seperated = string.split(':')
+            seperated = string.split(':', 1)
             return tuple(seperated)
 
     def user_object_from_credentials(
