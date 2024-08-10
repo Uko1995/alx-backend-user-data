@@ -22,4 +22,11 @@ class SessionAuth(Auth):
         '''returns a User ID based on session ID'''
         if not isinstance(session_id, str) or session_id is None:
             return None
-        return self.user_id_by_session_id.get(session_id)
+
+        return self.user_id_by_session_id.get(session_id, None)
+
+    def current_user(self, request=None):
+        '''returns a User based on cookie value'''
+        session_id = self.session_cookie(request)
+        user_id = self.user_id_for_session_id(session_id)
+        return User.get(user_id)
