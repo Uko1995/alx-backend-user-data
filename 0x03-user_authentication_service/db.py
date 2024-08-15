@@ -47,8 +47,8 @@ class DB:
         valid = User.__table__.columns.keys()
         for key in kwargs:
             if key not in valid:
-                raise InvalidRequestError
+                raise InvalidRequestError('Invalid')
 
         if user == []:
-            raise NoResultFound
+            raise NoResultFound('Not found')
         return user[0]
