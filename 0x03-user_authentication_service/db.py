@@ -41,7 +41,7 @@ class DB:
         return new_user
 
     def find_user_by(self, **kwargs: str) -> User:
-        '''returns the first row found on the users table'''
+        '''returns the first row found on the users table
         session = self._session
         user = session.query(User).filter_by(**kwargs).all()
         valid = User.__table__.columns.keys()
@@ -51,4 +51,8 @@ class DB:
 
         if user == []:
             raise NoResultFound('Not found')
-        return user[0]
+        return user[0]'''
+        user = self._session.query(User).filter_by(**kwargs).first()
+        if not user:
+            raise NoResultFound
+        return user
