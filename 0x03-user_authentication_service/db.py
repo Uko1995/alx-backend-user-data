@@ -7,7 +7,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
-from typing import TypeVar
 from user import Base, User
 
 
@@ -18,7 +17,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=False)
+        self._engine = create_engine("sqlite:///a.db")
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -41,7 +40,7 @@ class DB:
         return new_user
 
     def find_user_by(self, **kwargs: str) -> User:
-        '''returns the first row found on the users table'''
+        '''returns the first row found on the users table
         session = self._session
         user = session.query(User).filter_by(**kwargs).all()
         valid = User.__table__.columns.keys()
@@ -51,4 +50,12 @@ class DB:
 
         if user == []:
             raise NoResultFound()
-        return user[0]
+        return user[0]'''
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if not user:
+                raise NoResultFound()
+        except AttributeError as e:
+            raise InvalidRequestError()
+
+        return user
