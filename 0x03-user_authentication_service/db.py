@@ -39,23 +39,16 @@ class DB:
         session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs: str) -> User:
-        '''returns the first row found on the users table
+    def find_user_by(self, **kwargs) -> User:
+        """
+        A method that takes arbitrary keyword argument,
+        with which it filters a query.
+        """
         session = self._session
-        user = session.query(User).filter_by(**kwargs).all()
-        valid = User.__table__.columns.keys()
-        for key in kwargs:
-            if key not in valid:
-                raise InvalidRequestError()
-
-        if user == []:
-            raise NoResultFound()
-        return user[0]'''
         try:
-            user = self._session.query(User).filter_by(**kwargs).first()
-            if not user:
+            query = session.query(User).filter_by(**kwargs).first()
+            if not query:
                 raise NoResultFound()
-        except AttributeError as e:
+        except AttributeError as error:
             raise InvalidRequestError()
-
-        return user
+        return query
