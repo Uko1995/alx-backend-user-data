@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-'''methos that hashes a password'''
+'''method that hashes a password'''
 
 import bcrypt
 from user import Base, User
@@ -28,3 +28,11 @@ class Auth:
             raise ValueError(f'User {email} already exists')
         except NoResultFound:
             return self._db.add_user(email, _hash_password(password))
+
+    def valid_login(self, email: str, password: str) -> bool:
+        '''implements a valid login'''
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
+            return False
+        return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)
