@@ -46,7 +46,7 @@ class DB:
         """
         session = self._session
         try:
-            query = session.query(User).filter_by(**kwargs).first()
+            query = session.query(User).filter_by(**kwargs).one()
             if not query:
                 raise NoResultFound()
         except AttributeError as error:
