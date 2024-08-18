@@ -55,10 +55,12 @@ class Auth:
 
     def get_user_from_session_id(self, session_id: str) -> User:
         '''takes session_id and returns User'''
-        if session_id == None:
+        if session_id is None:
             return None
         try:
             user = self_db.find_user_by(session_id=session_id)
+            if not user:
+                return None
             return user
-        except NoResultFound:
+        except NoResultFound() or AttributeError:
             return None
