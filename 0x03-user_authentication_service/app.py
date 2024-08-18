@@ -68,7 +68,7 @@ def get_reset_password() -> str:
     '''resets password'''
     email = request.form.get('email')
     try:
-        user = self._db.find_user_by(email=email)
+        user = AUTH.create_session(email)
         token = AUTH.get_reset_token(email)
         return jsonify({"email": email, "reset_token": token}), 200
     except Exception:
