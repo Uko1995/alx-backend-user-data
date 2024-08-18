@@ -66,7 +66,7 @@ def profile() -> str:
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
 def get_reset_password() -> str:
     '''resets password'''
-    email = request.get('email')
+    email = request.form.get('email')
     user = self._db.find_user_by(email=email)
     if not user:
         abort(403)
