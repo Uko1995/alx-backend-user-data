@@ -76,3 +76,13 @@ class Auth:
             return token
         except Exception:
             raise ValueError()
+
+    def update_password(self, reset_token: str, password: str) -> None:
+        ''' updates password'''
+        user = self._db.find_user_by(reset_token=reset_token)
+        if not user:
+            raise ValueError()
+        else:
+            passw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            self._db.update_user(
+                user.id, hashed_password=passw, reset_token=None)
